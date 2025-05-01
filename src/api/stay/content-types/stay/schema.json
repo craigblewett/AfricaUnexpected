@@ -1,0 +1,26 @@
+{
+  "collectionName": "stays",
+  "info": {
+    "singularName": "stay",
+    "pluralName": "stays",
+    "displayName": "Stay"
+  },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "title":        { "type": "string", "required": true },
+    "slug":         { "type": "uid", "targetField": "title", "required": true },
+    "region":       { "type": "enumeration", "enum": ["Cape Town","Garden Route","Winelands","West Coast","Overberg"] },
+    "teaser":       { "type": "string" },
+    "description":  { "type": "richtext" },
+    "coverImage":   { "type": "media", "multiple": false, "required": true },
+    "gallery":      { "type": "media", "multiple": true },
+    "latitude":     { "type": "decimal" },
+    "longitude":    { "type": "decimal" },
+    "priceFrom":    { "type": "integer" },
+    "tier":         { "type": "enumeration", "enum": ["free","spark","live","wild"], "default": "free" },
+    "tags":         { "type": "string", "repeatable": true },
+    "affiliateUrl": { "type": "string" },
+    "downloadPdf":  { "type": "media", "multiple": false }
+  }
+}
+

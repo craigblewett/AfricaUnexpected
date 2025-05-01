@@ -1,0 +1,35 @@
+{
+  "collectionName": "tools",
+  "info": {
+    "singularName": "tool",
+    "pluralName": "tools",
+    "displayName": "Tool / Resource"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "file": {
+      "type": "media",
+      "multiple": false
+    },
+    "tier": {
+      "type": "enumeration",
+      "enum": ["spark", "live", "wild"],
+      "default": "spark"
+    }
+  }
+}
+
