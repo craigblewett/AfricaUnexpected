@@ -1,22 +1,70 @@
 {
+  "kind": "collectionType",
   "collectionName": "challenges",
   "info": {
     "singularName": "challenge",
     "pluralName": "challenges",
-    "displayName": "Challenge"
+    "displayName": "ChallengeOld",
+    "description": ""
   },
-  "options": { "draftAndPublish": true },
+  "options": {
+    "draftAndPublish": true
+  },
   "attributes": {
-    "title":       { "type": "string", "required": true },
-    "slug":        { "type": "uid", "targetField": "title", "required": true },
-    "category":    { "type": "enumeration", "enum": ["monthly","weekly","micro"] },
-    "difficulty":  { "type": "enumeration", "enum": ["easy","medium","spicy"] },
-    "budget":      { "type": "integer" },
-    "startDate":   { "type": "date" },
-    "endDate":     { "type": "date" },
-    "instructions":{ "type": "richtext" },
-    "image":       { "type": "media", "multiple": false },
-    "tier":        { "type": "enumeration", "enum": ["free","spark","live","wild"], "default": "free" }
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "monthly",
+        "weekly",
+        "micro"
+      ]
+    },
+    "difficulty": {
+      "type": "enumeration",
+      "enum": [
+        "easy",
+        "medium",
+        "spicy"
+      ]
+    },
+    "budget": {
+      "type": "integer"
+    },
+    "startDate": {
+      "type": "date"
+    },
+    "endDate": {
+      "type": "date"
+    },
+    "instructions": {
+      "type": "richtext"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false
+    },
+    "tier": {
+      "type": "enumeration",
+      "enum": [
+        "free",
+        "spark",
+        "live",
+        "wild"
+      ],
+      "default": "free"
+    },
+    "Testingthis": {
+      "type": "string"
+    }
   }
 }
-

@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "challanges",
+  "info": {
+    "singularName": "challange",
+    "pluralName": "challanges",
+    "displayName": "Challange"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid"
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "Monthly",
+        "Weekly",
+        "Micro"
+      ]
+    },
+    "difficulty": {
+      "type": "enumeration",
+      "enum": [
+        "Easy",
+        "Medium",
+        "Spicy"
+      ]
+    },
+    "budget": {
+      "type": "integer"
+    },
+    "instructions": {
+      "type": "richtext"
+    },
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "tier": {
+      "type": "enumeration",
+      "enum": [
+        "free",
+        "tier-1",
+        "tier-2",
+        "tier-3"
+      ]
+    }
+  }
+}

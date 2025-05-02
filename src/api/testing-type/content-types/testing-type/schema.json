@@ -1,0 +1,20 @@
+{
+  "kind": "collectionType",
+  "collectionName": "testing_types",
+  "info": {
+    "singularName": "testing-type",
+    "pluralName": "testing-types",
+    "displayName": "Testing Type"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Test": {
+      "type": "blocks"
+    },
+    "Testing": {
+      "type": "integer"
+    }
+  }
+}

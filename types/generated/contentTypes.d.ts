@@ -369,10 +369,49 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiChallangeChallange extends Struct.CollectionTypeSchema {
+  collectionName: 'challanges';
+  info: {
+    displayName: 'Challange';
+    pluralName: 'challanges';
+    singularName: 'challange';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    budget: Schema.Attribute.Integer;
+    category: Schema.Attribute.Enumeration<['Monthly', 'Weekly', 'Micro']>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    difficulty: Schema.Attribute.Enumeration<['Easy', 'Medium', 'Spicy']>;
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    instructions: Schema.Attribute.RichText;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::challange.challange'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID;
+    tier: Schema.Attribute.Enumeration<['free', 'tier-1', 'tier-2', 'tier-3']>;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiChallengeChallenge extends Struct.CollectionTypeSchema {
   collectionName: 'challenges';
   info: {
-    displayName: 'Challenge';
+    description: '';
+    displayName: 'ChallengeOld';
     pluralName: 'challenges';
     singularName: 'challenge';
   };
@@ -398,6 +437,7 @@ export interface ApiChallengeChallenge extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     startDate: Schema.Attribute.Date;
+    Testingthis: Schema.Attribute.String;
     tier: Schema.Attribute.Enumeration<['free', 'spark', 'live', 'wild']> &
       Schema.Attribute.DefaultTo<'free'>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
@@ -460,30 +500,69 @@ export interface ApiStayStay extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    affiliateUrl: Schema.Attribute.String;
-    coverImage: Schema.Attribute.Media & Schema.Attribute.Required;
+    affiliateUrl: Schema.Attribute.String & Schema.Attribute.Required;
+    bestSeason: Schema.Attribute.Enumeration<
+      ['Summer', 'Autumn', 'Winter', 'Spring', 'Year-round']
+    >;
+    coverImage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    > &
+      Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.RichText;
-    downloadPdf: Schema.Attribute.Media;
-    gallery: Schema.Attribute.Media<undefined, true>;
-    latitude: Schema.Attribute.Decimal;
+    downloadPdf: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    gallery: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    howToGetThere: Schema.Attribute.RichText;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::stay.stay'> &
       Schema.Attribute.Private;
-    longitude: Schema.Attribute.Decimal;
-    priceFrom: Schema.Attribute.Integer;
+    location: Schema.Attribute.String;
+    overview: Schema.Attribute.RichText;
+    priceRange: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
-    region: Schema.Attribute.Enumeration<
-      ['Cape Town', 'Garden Route', 'Winelands', 'West Coast', 'Overberg']
-    >;
+    recommendedStay: Schema.Attribute.String;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
-    tags: Schema.Attribute.String;
     teaser: Schema.Attribute.String;
-    tier: Schema.Attribute.Enumeration<['free', 'spark', 'live', 'wild']> &
-      Schema.Attribute.DefaultTo<'free'>;
+    tier: Schema.Attribute.Enumeration<['free', 'tier-1', 'tier-2', 'tier-3']>;
+    tipsSafety: Schema.Attribute.String;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    whatToPack: Schema.Attribute.RichText;
+  };
+}
+
+export interface ApiTestingTypeTestingType extends Struct.CollectionTypeSchema {
+  collectionName: 'testing_types';
+  info: {
+    displayName: 'Testing Type';
+    pluralName: 'testing-types';
+    singularName: 'testing-type';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::testing-type.testing-type'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    Test: Schema.Attribute.Blocks;
+    Testing: Schema.Attribute.Integer;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1029,9 +1108,11 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::challange.challange': ApiChallangeChallange;
       'api::challenge.challenge': ApiChallengeChallenge;
       'api::itinerary.itinerary': ApiItineraryItinerary;
       'api::stay.stay': ApiStayStay;
+      'api::testing-type.testing-type': ApiTestingTypeTestingType;
       'api::tool.tool': ApiToolTool;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
