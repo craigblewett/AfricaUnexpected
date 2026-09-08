@@ -74,3 +74,69 @@ au render   concepts.json --pick 2  ->  out.mp4
 
 That needs `ffmpeg` and `ffprobe` on PATH and a Gemini key, neither of which is
 available in the environment this was written in — so it runs on your machine, not here.
+
+---
+
+## The spike CLI
+
+`services/worker` — the D1 gate. Four commands, JSON files between them, no database and
+no queue. Its only job is to answer one question before any product surface exists:
+**can a multimodal model produce Reel concepts worth posting, from AU's own footage?**
+
+```bash
+export GOOGLE_GENERATIVE_AI_API_KEY=...
+
+pnpm --filter @au/worker au ingest ./cederberg-trip --work ./run-01
+pnpm --filter @au/worker au shots  --work ./run-01 \
+     --context "Two nights near Clanwilliam, Feb 2026" --facts ./facts.json
+pnpm --filter @au/worker au concepts --work ./run-01 --candidates 10
+pnpm --filter @au/worker au render   --work ./run-01 --pick 2 --out reel.mp4
+```
+
+`--facts` takes a JSON array of `{key, value, source, sourceRef}`. Anything not in that
+file cannot be stated as fact by the model — the validator flags it and the concept is
+shown badged rather than rendered silently.
+
+Requires `ffmpeg` and `ffprobe` on PATH.
+
+### What each stage proves
+
+| Stage | Question it answers |
+|---|---|
+| `ingest` | Does ffprobe read rotation correctly, and do proxies come out upright? |
+| `shots` | Is FFmpeg's `scdet` good enough on drone and vehicle footage, or is PySceneDetect needed? `shots.json` keeps the raw boundaries so they can be scored against hand marks. |
+| `concepts` | **The gate.** Three of five projects must yield a concept worth generating. |
+| `render` | Does the two-stage cache hold up on mixed 60fps phone and 30fps drone footage? |
+
+### Structure
+
+```
+services/worker/
+  src/ffmpeg.ts             every FFmpeg call — spawn with an argv array, shell: false
+  src/crop.ts               9:16 crop geometry (pure)
+  src/ass.ts                ASS caption generation (pure)
+  src/shots.ts              scene changes -> shot ranges (pure)
+  src/render.ts             two-stage render + segment cache
+  src/providers/
+    types.ts                ShotDetector, VideoUnderstanding, StoryModel interfaces
+    model-config.ts         model IDs and prices — configuration, never domain logic
+    ffmpeg-scenes.ts        the default detector
+    gemini.ts               shot analysis, schema-forced output
+    story.ts                planner + adversarial critic, two passes
+    select.ts               diversity filter (pure)
+  src/commands/             ingest · shots · concepts
+  src/cli.ts                argument parsing and the four subcommands
+```
+
+### Notes for whoever runs it first
+
+- **No model output reaches a shell.** `ffmpeg.ts` is the only module that spawns a
+  process, and it always passes an argv array with `shell: false`. Filter strings are
+  built from numbers this codebase computed.
+- **Concept → manifest is deterministic**, not a second model call. The concept already
+  names its shots, moments and durations; laying them onto a timeline is arithmetic, and
+  a model there would only add a chance of inventing a range.
+- **The critic is a separate pass** that has not seen the planner's reasoning. Asking one
+  model for five concepts reliably returns five wordings of one idea.
+- Check the AI SDK call shape in `providers/gemini.ts` and `providers/story.ts` against
+  the installed `node_modules` before the first run — that API moves between versions.
